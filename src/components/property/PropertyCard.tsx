@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Heart } from "lucide-react";
+import { Heart, X } from "lucide-react";
 
 interface PropertyCardProps {
   id: string;
@@ -15,9 +15,11 @@ interface PropertyCardProps {
   bathrooms: number;
   squareFeet: number;
   isSaved?: boolean;
+  isSelected?: boolean;
   onSave?: (id: string) => void;
   onSelect?: (id: string) => void;
-  isSelected?: boolean;
+  onRemove?: (id: string) => void;
+  showRemoveButton?: boolean;
 }
 
 const PropertyCard = ({
@@ -30,9 +32,11 @@ const PropertyCard = ({
   bathrooms = 2,
   squareFeet = 2000,
   isSaved = false,
+  isSelected = false,
   onSave = () => {},
   onSelect = () => {},
-  isSelected = false,
+  onRemove = () => {},
+  showRemoveButton = false,
 }: PropertyCardProps) => {
   return (
     <Card
@@ -40,14 +44,28 @@ const PropertyCard = ({
     >
       <div className="relative">
         <img src={image} alt={address} className="w-full h-48 object-cover" />
-        <Button
-          variant="ghost"
-          size="icon"
-          className={`absolute top-2 right-2 ${isSaved ? "text-red-500" : ""}`}
-          onClick={() => onSave(id)}
-        >
-          <Heart className="h-5 w-5" fill={isSaved ? "currentColor" : "none"} />
-        </Button>
+        {showRemoveButton ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 hover:bg-red-100 hover:text-red-600"
+            onClick={() => onRemove(id)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`absolute top-2 right-2 ${isSaved ? "text-red-500" : ""}`}
+            onClick={() => onSave(id)}
+          >
+            <Heart
+              className="h-5 w-5"
+              fill={isSaved ? "currentColor" : "none"}
+            />
+          </Button>
+        )}
       </div>
 
       <CardContent className="p-4">
@@ -66,13 +84,15 @@ const PropertyCard = ({
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex gap-2">
-        <Button
-          variant="outline"
-          className="flex-1"
-          onClick={() => onSelect(id)}
-        >
-          Compare
-        </Button>
+        {!showRemoveButton && (
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => onSelect(id)}
+          >
+            Compare
+          </Button>
+        )}
         <Link to={`/property/${id}`} className="flex-1">
           <Button className="w-full">View Details</Button>
         </Link>
