@@ -27,7 +27,7 @@ const HeroSection = () => {
         </p>
 
         {/* Search Section */}
-        <div className="w-full max-w-4xl bg-white/10 backdrop-blur-md rounded-lg p-6">
+        <div className="w-full max-w-4xl bg-white/20 backdrop-blur-lg rounded-lg p-6 shadow-xl border border-white/30">
           <SearchFilters
             onSearch={(query) => console.log(query)}
             onFilterChange={(filters) => console.log(filters)}
